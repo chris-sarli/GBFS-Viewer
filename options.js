@@ -7,7 +7,6 @@ let files = {
 };
 
 var tileBasemapsToInclude = {
-    // 
     "ESRI World Imagery": {
         url: 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
         opts: {
@@ -53,7 +52,7 @@ let feedsToInclude = [
                     fillColor: "white",
                     fillOpacity: 0,
                     opacity: 1,
-                    weight: 2
+                    weight: 3
                 }
             }
         },
@@ -101,15 +100,25 @@ let feedsToInclude = [
     }];
 
 let options = {
-    "bounds": [[41.7633, -71.568], [41.8710, -71.281]],
-    "files": files,
-    "basemaps": tileBasemapsToInclude,
-    "feeds": feedsToInclude,
-    "popupVehicle": true,
-    "vehiclePopupTitle": "<strong>Vehicle ID:</strong> ",
-    "popupZone": true,
-    "zonePopupTitle": "<strong>Zone:</strong> ",
-    "zonePopupGeoJsonField": "zone",
-    "zones": zones,
-    "zonesColor": "#e56f00"
+    mapObject: 'gbfsMap',
+    bounds: [[41.7633, -71.568], [41.8710, -71.281]],
+    files: files,
+    basemaps: tileBasemapsToInclude,
+    feeds: feedsToInclude,
+    vehicle: {
+        popup: true
+    },
+    zones: {
+        data: zones,
+        popup: {
+            title: "<strong>Zone:</strong> ",
+            geoJsonField: "zone",
+        },
+        display: {
+            color: "#e56f00",
+            fillColor: "#e56f00",
+            fillOpacity: 0.05
+        }
+    }
+
 }
