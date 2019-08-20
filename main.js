@@ -112,7 +112,7 @@ class Feed {
                         for (var s in current) {
                             var status = current[s];
                             if (stations[status.station_id] != undefined) {
-                                stations[status.station_id].status = status;
+                                stations[status.station_id].addStatus(status);
                             }
                         }
 
@@ -131,7 +131,9 @@ class Feed {
                                                     "Station Name": station.name,
                                                     "Station ID": station.id,
                                                     "Latitude": precise_round(station.lat, 3),
-                                                    "Longitude": precise_round(station.lon, 3)
+                                                    "Longitude": precise_round(station.lon, 3),
+                                                    "Available Bikes": station.num_bikes_available,
+                                                    "Available Docks": station.num_docks_available
                                                 },
                                                 station.info,
                                                 station.status])
@@ -168,6 +170,8 @@ class Station {
         this.name;
         this.lat;
         this.lon;
+        this.num_bikes_available;
+        this.num_docks_available;
         this.info = {};
         this.status = {};
         for (var i in info) {
@@ -186,6 +190,22 @@ class Station {
                     break;
                 default:
                     this.info[i] = info[i];
+                    break;
+            }
+        }
+    }
+
+    addStatus(json) {
+        for (var s in json) {
+            switch (s) {
+                case "num_bikes_available":
+                    this.num_bikes_available = json[s];
+                    break;
+                case "num_docks_available":
+                    this.num_docks_available = json[s];
+                    break;
+                default:
+                    this.status[s] = json[s];
                     break;
             }
         }
