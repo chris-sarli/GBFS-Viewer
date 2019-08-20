@@ -1,7 +1,9 @@
 
 let files = {
     'sysinfo': 'system_information',
-    'free_status': 'free_bike_status'
+    'free_status': 'free_bike_status',
+    'station_info': 'station_information',
+    'station_status': 'station_status'
 };
 
 var tileBasemapsToInclude = {
@@ -39,6 +41,22 @@ let feedsToInclude = [
     {
         url: "https://pvd.jumpbikes.com/opendata/",
         feed_name: "JUMP",
+        hubs: {
+            layerName: "JUMP Stations",
+            popup: true,
+            hideDefault: true,
+            display: {
+                type: "circle",
+                options: {
+                    radius: 7,
+                    color: "#FF0A2D",
+                    fillColor: "white",
+                    fillOpacity: 0,
+                    opacity: 1,
+                    weight: 2
+                }
+            }
+        },
         display: {
             type: "circle",
             options: {

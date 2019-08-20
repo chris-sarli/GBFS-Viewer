@@ -68,9 +68,10 @@ let systemZones = L.geoJSON(options.zones, zoneOptions);
 })().addTo(gbfsMap);
 
 class Feed {
-    constructor(url, name, displayOpts) {
+    constructor(url, name, displayOpts, hubs) {
         this.url = url;
         this.name = name;
+        this.hubs = hubs;
         this.featureGroup = L.featureGroup([]);
         this.vehicles = [];
         this.displayOpts = displayOpts;
@@ -85,7 +86,7 @@ class Feed {
             this.featureGroup.addTo(gbfsMap);
             // this.reportedName = extractFromUrl(['data', 'name'], gbfsUrls.sysinfo);
 
-            this.parseAvailable(gbfsUrls.free_status).then(available => {
+            parseAvailable(gbfsUrls.free_status).then(available => {
                 for (var v in available) {
                     this.vehicles[v] = available[v];
 
@@ -97,33 +98,145 @@ class Feed {
                     this.isVisable = true;
                 }
             });
+
+            if (this.hubs != undefined && this.hubs != false) {
+                parseHubInfo(gbfsUrls.station_info).then(recieved => {
+
+                    var stations = {};
+
+                    for (var r in recieved) {
+                        stations[recieved[r].station_id] = new Station(recieved[r])
+                    }
+
+                    parseHubInfo(gbfsUrls.station_status).then(current => {
+                        for (var s in current) {
+                            var status = current[s];
+                            if (stations[status.station_id] != undefined) {
+                                stations[status.station_id].status = status;
+                            }
+                        }
+
+                        var hubLayerGroup = L.featureGroup([]);
+
+                        for (var s in stations) {
+
+                            var station = stations[s]
+
+                            if (this.hubs.popup) {
+                                hubLayerGroup.addLayer(
+                                    display(station, this.hubs.display)
+                                        .bindPopup(
+                                            toPopupDisplay([
+                                                {
+                                                    "Station Name": station.name,
+                                                    "Station ID": station.id,
+                                                    "Latitude": precise_round(station.lat, 3),
+                                                    "Longitude": precise_round(station.lon, 3)
+                                                },
+                                                station.info,
+                                                station.status])
+                                        )
+                                );
+                            }
+                            else {
+                                hubLayerGroup.addLayer(display(station, this.hubs.display));
+                            }
+                        }
+
+                        feedLayers[this.hubs.layerName] = hubLayerGroup;
+
+                        feedLayers[this.hubs.layerName].addTo(gbfsMap);
+
+                        addLayerToControl(this.hubs.layerName);
+
+                        if (this.hubs.hideDefault) {
+                            feedLayers[this.hubs.layerName].removeFrom(gbfsMap);
+                        }
+                    })
+
+                })
+            }
+
         });
     }
 
-    parseAvailable(specificUrl) {
-        return new Promise(resolve => {
-            var xmlhttp = new XMLHttpRequest();
-            xmlhttp.onreadystatechange = function () {
-                if (this.readyState == 4 && this.status == 200) {
-                    var response = JSON.parse(this.responseText);
+}
 
-                    var available = response.data.bikes
-
-                    var vehicles = {};
-
-                    for (var r in available) {
-                        var i = available[r];
-                        vehicles[r] = new Vehicle(i, "dunno");
-                    }
-                    resolve(vehicles);
-                }
-            };
-
-            xmlhttp.open("GET", specificUrl, true);
-            xmlhttp.send();
-        })
+class Station {
+    constructor(info) {
+        this.id;
+        this.name;
+        this.lat;
+        this.lon;
+        this.info = {};
+        this.status = {};
+        for (var i in info) {
+            switch (i) {
+                case "station_id":
+                    this.id = info[i];
+                    break;
+                case "name":
+                    this.name = info[i];
+                    break;
+                case "lat":
+                    this.lat = info[i];
+                    break;
+                case "lon":
+                    this.lon = info[i];
+                    break;
+                default:
+                    this.info[i] = info[i];
+                    break;
+            }
+        }
     }
+}
 
+function parseFile(url) {
+    return new Promise(resolve => {
+        var xmlhttp = new XMLHttpRequest();
+        xmlhttp.onreadystatechange = function () {
+            if (this.readyState == 4 && this.status == 200) {
+                var response = JSON.parse(this.responseText);
+
+                var data = response.data
+
+                resolve(data);
+            }
+        };
+
+        xmlhttp.open("GET", url, true);
+        xmlhttp.send();
+    });
+}
+
+function parseHubInfo(url) {
+    return new Promise(resolve => {
+        parseFile(url).then(data => {
+
+            var stations = data.stations
+
+            resolve(stations);
+        })
+    });
+}
+
+function parseAvailable(specificUrl) {
+    return new Promise(resolve => {
+        parseFile(specificUrl).then(data => {
+
+            var available = data.bikes
+
+            var vehicles = {};
+
+            for (var r in available) {
+                var i = available[r];
+                vehicles[r] = new Vehicle(i, "dunno");
+            }
+
+            resolve(vehicles);
+        })
+    });
 }
 
 function toPopupDisplay(objs) {
@@ -149,7 +262,7 @@ function precise_round(num, dec) {
 
 function addLayerToGroup(featureGroup, vehicleToAdd, feedDisplayOpts, operator) {
     if (options.popupVehicle == true) {
-        featureGroup.addLayer(vehicleToAdd.display(feedDisplayOpts).bindPopup(
+        featureGroup.addLayer(display(vehicleToAdd, feedDisplayOpts).bindPopup(
             toPopupDisplay(
                 [{
                     "Vehicle ID": vehicleToAdd.id,
@@ -164,9 +277,7 @@ function addLayerToGroup(featureGroup, vehicleToAdd, feedDisplayOpts, operator) 
 }
 
 class Vehicle {
-    constructor(json, operator) {
-
-        this.operator = operator;
+    constructor(json) {
 
         var arr = [];
         for (var i in json) {
@@ -188,24 +299,16 @@ class Vehicle {
 
         this.misc = arr;
     }
+}
 
-    display(displayOpts) {
-        switch (displayOpts.type) {
-            case "icon":
-                return L.marker([this.lat, this.lon], displayOpts.options);
-                break;
-            case "circle":
-                return L.circleMarker([this.lat, this.lon], displayOpts.options);
-                break;
-        }
-
-        return L.circleMarker([this.lat, this.lon], {
-            radius: 5,
-            color: "#FFFFFF",
-            fillColor: "#FF0A2D",
-            fillOpacity: 0.9,
-            opacity: 0.9
-        })
+function display(obj, displayOpts) {
+    switch (displayOpts.type) {
+        case "icon":
+            return L.marker([obj.lat, obj.lon], displayOpts.options);
+            break;
+        case "circle":
+            return L.circleMarker([obj.lat, obj.lon], displayOpts.options);
+            break;
     }
 }
 
@@ -215,7 +318,7 @@ function createFeeds(specified) {
 
     for (f in specified) {
         var feedToAdd = specified[f];
-        feeds.push(new Feed(feedToAdd.url, feedToAdd.feed_name, feedToAdd.display));
+        feeds.push(new Feed(feedToAdd.url, feedToAdd.feed_name, feedToAdd.display, feedToAdd.hubs));
     }
 
     return feeds;
