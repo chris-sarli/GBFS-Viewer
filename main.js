@@ -11,6 +11,8 @@ let basemaps = function () {
     return out;
 }();
 
+=>
+
 // Holds the Overlay Layers for each Feed object
 var feedLayers = {};
 
