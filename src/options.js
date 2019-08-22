@@ -1,3 +1,4 @@
+import { zones } from "./srcs";
 
 let files = {
     'sysinfo': 'system_information',
@@ -99,7 +100,7 @@ let feedsToInclude = [
         }
     }];
 
-let options = {
+export var options = {
     mapObject: 'gbfsMap',
     bounds: [[41.7633, -71.568], [41.8710, -71.281]],
     files: files,
