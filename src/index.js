@@ -6,15 +6,13 @@ import booleanPointInPolygon from "@turf/boolean-point-in-polygon";
 import {point, polygon} from "@turf/helpers";
 
 import {options} from "./options";
-// import { Feed } from "./Feed";
-import {NewFeed} from "./NewFeed";
-
+import {Feed} from "./Feed";
 
 let app = {}
 
 app.options = options;
 
-// Holds the Feed objects
+// Holds the OldFeed objects
 app.feeds = [];
 
 // Create the basemaps that will be available
@@ -26,7 +24,7 @@ app.basemaps = function () {
     return out;
 }();
 
-// Holds the Overlay Layers for each Feed object
+// Holds the Overlay Layers for each OldFeed object
 app.feedLayers = {};
 
 // The leaflet Control.Layer
@@ -81,14 +79,14 @@ if (typeof app.options.zones !== 'undefined') {
 }
 
 /**
- * Creates Feed objects from indicated feeds.
+ * Creates OldFeed objects from indicated feeds.
  * @param {Object[]} specified Array of Objects representing feeds to be added to map.
  */
 function createFeeds(specified) {
     let feeds = [];
     for (let f in specified) {
         let feedToAdd = specified[f];
-        let feed = new NewFeed(feedToAdd, options.files);
+        let feed = new Feed(feedToAdd, options.files);
         // feed.getFeatureGroups(app.options.files);
         feeds.push([feed]);
     }

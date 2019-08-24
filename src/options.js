@@ -1,4 +1,4 @@
-import { zones } from "./srcs";
+const zones = require('json-loader!./zones.geojson');
 
 let files = {
     'sysinfo': 'system_information',

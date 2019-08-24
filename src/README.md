@@ -12,7 +12,7 @@ This contains a map `<div>` for Leaflet, a simple loading overlay, and a modal.
 
 main.js contains the bulk of the tool. All classes and functions have been combined into this one file. If the contents were simply included in `<script>` tags (and CSS moved inline), the whole tool could easily be contained in a single HTML file.
 
-## srcs.js
+## zones.geojson
 
 Right now, this file simply assigns a large chunk of GeoJSON to a variable which is used in main.js. Ideally, this can be imported.
 
@@ -32,11 +32,11 @@ This file's purpose is to provide an options object.
 
 ### Feeds
 
-Each Feed is specified with an Object of the following construction:
+Each OldFeed is specified with an Object of the following construction:
 
 | Field     | Required | Description                                                                           |
 |-----------|----------|---------------------------------------------------------------------------------------|
-| url       | Yes      | The base URL of the GBFS Feed. The gbfs.json file should reside in this directory.    |
+| url       | Yes      | The base URL of the GBFS OldFeed. The gbfs.json file should reside in this directory.    |
 | feed_name | Yes      | The user-facing name of this feed, specifically the free, undocked vehicles reported. |
 | hubs      | Optional | See [Hubs](#Hubs).                                                                    |
 | Display   | Yes      | See [Display](#Display).                                                              |
