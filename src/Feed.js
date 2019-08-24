@@ -28,9 +28,13 @@ export class Feed {
         })
     }
 
-    generateFeatureGroupAndLayers(objects, displayOpts) {
+    generateFeatureGroup(objects, displayOpts, popup) {
         let layers = objects.map(obj => {
             let marker = generateMarker(obj, displayOpts);
+            if (typeof popup !== 'undefined') {
+
+                marker.bindPopup(toPopupDisplay(dissolve(obj)));
+            }
             return marker;
         });
         return L.featureGroup(layers);
@@ -39,10 +43,10 @@ export class Feed {
     generateFeatureGroups(data) {
         let featureGroups = {};
         if (typeof this.freeVehicles !== 'undefined') {
-            featureGroups[this.freeVehicles.layerName] = this.generateFeatureGroupAndLayers(data.vehicles, this.freeVehicles.displayOpts);
+            featureGroups[this.freeVehicles.layerName] = this.generateFeatureGroup(data.vehicles, this.freeVehicles.displayOpts, this.freeVehicles.popup);
         }
         if (this.hubs !== undefined) {
-            featureGroups[this.hubs.layerName] = this.generateFeatureGroupAndLayers(data.stations, this.hubs.displayOpts);
+            featureGroups[this.hubs.layerName] = this.generateFeatureGroup(data.stations, this.hubs.displayOpts, this.hubs.popup);
         }
         return featureGroups;
     }
@@ -149,6 +153,21 @@ function generateMarker(obj, displayOpts) {
     return marker;
 }
 
+/**
+ * Converts Array of JSON Objects into HTML with keys bolded and followed with a colon.
+ * @param {Object[]} objects Array of JSON objects representing keys and values
+ */
+function toPopupDisplay(objects) {
+    let str = "";
+
+    for (let obj in objects) {
+        for (let l in objects[obj]) {
+            str += "<strong>" + l + ":</strong> " + objects[obj][l].toString().replace(/,/g, ", ") + "<br />";
+        }
+    }
+    return str;
+}
+
 function getUrl(url) {
     if (typeof url === 'undefined') {
         console.log("Rejected null url.");
@@ -167,4 +186,48 @@ function getUrl(url) {
             xmlhttp.send();
         });
     }
+}
+
+/**
+ * Rounds a number to a given number of decimal places.
+ * @param {Number} num Number to round
+ * @param {Number} dec Decimals to round to
+ */
+function precise_round(num, dec) {
+
+    if ((typeof num !== 'number') || (typeof dec !== 'number'))
+        return false;
+
+    var num_sign = num >= 0 ? 1 : -1;
+
+    return (Math.round((num * Math.pow(10, dec)) + (num_sign * 0.0001)) / Math.pow(10, dec)).toFixed(dec);
+}
+
+function dissolve(json) {
+
+    let toWrite = [];
+
+    for (let i in json) {
+        let toAdd = [function () {
+            switch (i) {
+                case "id":
+                    return {"ID": json[i]};
+                case "lat":
+                    return {"Latitude": precise_round(parseFloat(json[i]), 3)};
+                case "lon":
+                    return {"Longitude": precise_round(parseFloat(json[i]), 3)};
+                case "name":
+                    return {"Name": json[i]};
+                case "misc":
+                    return dissolve(json[i]);
+                default:
+                    let o = {};
+                    o[i] = json[i];
+                    return o;
+            }
+        }()];
+
+        toWrite = toWrite.concat(toAdd.flat());
+    }
+    return toWrite;
 }
