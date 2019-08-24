@@ -7,7 +7,7 @@ let files = {
     'station_status': 'station_status'
 };
 
-var tileBasemapsToInclude = {
+let tileBasemapsToInclude = {
     "ESRI World Imagery": {
         url: 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
         opts: {
@@ -41,11 +41,27 @@ let feedsToInclude = [
     {
         url: "https://pvd.jumpbikes.com/opendata/",
         feed_name: "JUMP",
+        freeVehicles: {
+            layerName: "JUMP",
+            popup: true,
+            hideDefault: false,
+            displayOpts: {
+                type: "circle",
+                optionsOpts: {
+                    radius: 5,
+                    color: "#FFFFFF",
+                    fillColor: "#FF0A2D",
+                    fillOpacity: 0.9,
+                    opacity: 0.9,
+                    weight: 2
+                }
+            }
+        },
         hubs: {
             layerName: "JUMP Stations",
             popup: true,
             hideDefault: true,
-            display: {
+            displayOpts: {
                 type: "circle",
                 options: {
                     radius: 7,
@@ -56,59 +72,55 @@ let feedsToInclude = [
                     weight: 3
                 }
             }
-        },
-        display: {
-            type: "circle",
-            options: {
-                radius: 5,
-                color: "#FFFFFF",
-                fillColor: "#FF0A2D",
-                fillOpacity: 0.9,
-                opacity: 0.9,
-                weight: 2
-            }
         }
     },
     {
         url: "https://mds.bird.co/gbfs/providence/",
         feed_name: "Bird",
-        display: {
-            type: "circle",
-            options: {
-                radius: 5,
-                color: "#FFFFFF",
-                fillColor: "#121212",
-                fillOpacity: 0.9,
-                opacity: 0.9,
-                weight: 2
+        freeVehicles: {
+            layerName: "Bird",
+            popup: true,
+            hideDefault: false,
+            displayOpts: {
+                type: "circle",
+                options: {
+                    radius: 5,
+                    color: "#FFFFFF",
+                    fillColor: "#121212",
+                    fillOpacity: 0.9,
+                    opacity: 0.9,
+                    weight: 2
+                }
             }
         }
     },
     {
         url: "https://data.lime.bike/api/partners/v1/gbfs/providence/",
         feed_name: "Lime",
-        display: {
-            type: "circle",
-            options: {
-                radius: 5,
-                color: "#FFFFFF",
-                fillColor: "#45D700",
-                fillOpacity: 0.9,
-                opacity: 0.9,
-                weight: 2
+        freeVehicles: {
+            layerName: "Lime",
+            popup: true,
+            hideDefault: false,
+            displayOpts: {
+                type: "circle",
+                options: {
+                    radius: 5,
+                    color: "#FFFFFF",
+                    fillColor: "#45D700",
+                    fillOpacity: 0.9,
+                    opacity: 0.9,
+                    weight: 2
+                }
             }
         }
     }];
 
-export var options = {
+export let options = {
     mapObject: 'gbfsMap',
     bounds: [[41.7633, -71.568], [41.8710, -71.281]],
     files: files,
     basemaps: tileBasemapsToInclude,
     feeds: feedsToInclude,
-    vehicle: {
-        popup: true
-    },
     zones: {
         data: zones,
         popup: {
