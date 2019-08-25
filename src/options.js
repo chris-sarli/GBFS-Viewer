@@ -8,33 +8,47 @@ let files = {
 };
 
 let tileBasemapsToInclude = {
-    "ESRI World Imagery": {
-        url: 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
-        opts: {
-            attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
-        }
-    },
-    "Rhode Island Aerial Photographs (1951-1952)": {
-        url: 'https://tiles.arcgis.com/tiles/S8zZg9pg23JUEexQ/arcgis/rest/services/atlas_img_1951_1952/MapServer/tile/{z}/{y}/{x}',
-        opts: {
-            attribution: '<a href="https://www.edc.uri.edu">URI EDC</a>, <a href="http://www.rigis.org">RIGIS</a>'
-        }
-    },
+    // "ESRI World Imagery": {
+    //     url: 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
+    //     opts: {
+    //         attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
+    //     }
+    // },
+    // "Rhode Island Aerial Photographs (1951-1952)": {
+    //     url: 'https://tiles.arcgis.com/tiles/S8zZg9pg23JUEexQ/arcgis/rest/services/atlas_img_1951_1952/MapServer/tile/{z}/{y}/{x}',
+    //     opts: {
+    //         attribution: '<a href="https://www.edc.uri.edu">URI EDC</a>, <a href="http://www.rigis.org">RIGIS</a>'
+    //     }
+    // },
+    // "Rhode Island Aerial Photographs (2011)": {
+    //     url: 'https://tiles.arcgis.com/tiles/S8zZg9pg23JUEexQ/arcgis/rest/services/atlas_img_2011/MapServer/tile/{z}/{y}/{x}',
+    //     opts: {
+    //         attribution: '<a href="https://www.edc.uri.edu">URI EDC</a>, <a href="http://www.rigis.org">RIGIS</a>'
+    //     }
+    // },
     "ESRI Gray": {
         url: 'https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}',
         opts: {
             attribution: 'Tiles &copy; Esri &mdash; Esri, DeLorme, NAVTEQ',
             maxZoom: 16
         }
-    },
-    "CartoDB Voyager": {
-        url: 'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png',
-        opts: {
-            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
-            subdomains: 'abcd',
-            maxZoom: 19
-        }
     }
+    // "CartoDB Dark": {
+    //     url: 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',
+    //     opts: {
+    //         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+    //         subdomains: 'abcd',
+    //         maxZoom: 19
+    //     }
+    // },
+    // "CartoDB Voyager": {
+    //     url: 'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png',
+    //     opts: {
+    //         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+    //         subdomains: 'abcd',
+    //         maxZoom: 19
+    //     }
+    // }
 }
 
 let feedsToInclude = [
@@ -47,7 +61,7 @@ let feedsToInclude = [
             hideDefault: false,
             displayOpts: {
                 type: "circle",
-                optionsOpts: {
+                options: {
                     radius: 5,
                     color: "#FFFFFF",
                     fillColor: "#FF0A2D",

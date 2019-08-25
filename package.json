@@ -34,6 +34,8 @@
   "dependencies": {
     "@turf/boolean-point-in-polygon": "^6.0.1",
     "@turf/helpers": "^6.1.4",
+    "@turf/invariant": "^6.1.2",
+    "@turf/meta": "^6.0.2",
     "leaflet": "^1.5.1"
   }
 }

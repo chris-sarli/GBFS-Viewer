@@ -169,7 +169,7 @@ function generateMarker(obj, displayOpts) {
  * Converts Array of JSON Objects into HTML with keys bolded and followed with a colon.
  * @param {Object[]} objects Array of JSON objects representing keys and values
  */
-function toPopupDisplay(objects) {
+export function toPopupDisplay(objects) {
     let str = "";
 
     for (let obj in objects) {
@@ -215,7 +215,7 @@ function precise_round(num, dec) {
     return (Math.round((num * Math.pow(10, dec)) + (num_sign * 0.0001)) / Math.pow(10, dec)).toFixed(dec);
 }
 
-function dissolve(json) {
+export function dissolve(json) {
 
     let toWrite = [];
 

@@ -55,6 +55,7 @@ body {
 
 .fix-margin {
     margin-right: 4px !important;
+    transition: 0.2s ease;
 }
 
 #modal-container {
@@ -89,10 +90,10 @@ body {
     background-image:
             repeating-linear-gradient(
                     -45deg,
-                    rgba(41, 128, 185, 0.2),
-                    rgba(41, 128, 185, 0.2) 11px,
-                    #eee 10px,
-                    #eee 20px /* determines size */
+                    rgba(229, 111, 0, 0.2),
+                    rgba(229, 111, 0, 0.2) 11px,
+                    rgba(229, 111, 0, 0.3) 10px,
+                    rgba(229, 111, 0, 0.3) 20px /* determines size */
             );
     background-size: 28px 28px;
     animation: move .5s linear infinite;

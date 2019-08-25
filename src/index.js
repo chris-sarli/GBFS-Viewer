@@ -4,9 +4,11 @@ import L from "leaflet";
 
 import booleanPointInPolygon from "@turf/boolean-point-in-polygon";
 import {point, polygon} from "@turf/helpers";
+import {getGeom} from "@turf/invariant";
+import {featureEach} from "@turf/meta";
 
 import {options} from "./options";
-import {Feed} from "./Feed";
+import {Feed, toPopupDisplay} from "./Feed";
 
 let app = {}
 
@@ -14,6 +16,8 @@ app.options = options;
 
 // Holds the OldFeed objects
 app.feeds = [];
+
+app.zs = L.marker();
 
 // Create the basemaps that will be available
 app.basemaps = function () {
@@ -23,6 +27,8 @@ app.basemaps = function () {
     }
     return out;
 }();
+
+app.zones = {};
 
 // Holds the Overlay Layers for each OldFeed object
 app.feedLayers = {};
@@ -60,22 +66,27 @@ app.customButtons = L.Control.extend({
 let custom = new app.customButtons();
 custom.addTo(app.map);
 
-// Add Zone geoJSON to map if speicified
+function getZoneCounts(zone) {
+    let keys = Object.keys(app.zones[zone].objs);
+    console.log(zone, keys)
+    return keys.map(key => {
+        let o = {};
+        o[key] = app.zones[zone].objs[key];
+        return o;
+    });
+}
+
+// Add Zone geoJSON to map if specified
 if (typeof app.options.zones !== 'undefined') {
 
     // Create the polygons
-    let systemZones = L.geoJSON(app.options.zones.data, app.options.zones.display);
+    app.systemZones = L.geoJSON(app.options.zones.data, app.options.zones.display);
 
-    (function () {
-        // If specified, bind popups to individual polygon zones
-        if (app.options.zones.popup != undefined) {
-            return systemZones.bindPopup(function (layer) {
-                return app.options.zones.popup.title + layer.feature.properties[app.options.zones.popup.geoJsonField];
-            });
-        } else {
-            return systemZones
-        }
-    })().addTo(app.map);
+    featureEach(getGeom(app.options.zones.data), (c, i) => {
+        app.zones[c.properties.zone] = {objs: {}};
+        app.zones[c.properties.zone].poly = c.geometry;
+    });
+    console.log(app.zones);
 }
 
 /**
@@ -115,9 +126,18 @@ function createFeeds(specified) {
 // Variable to track loading state of view
 let loading = false;
 
+
+function clearZoneCounts() {
+    for (let z in app.zones) {
+        app.zones[z].objs = {};
+    }
+    app.UNZONED = {};
+}
+
 // Clear map and load
 function load() {
     deactivateReloader();
+    clearZoneCounts();
     return new Promise(function (resolve) {
 
         for (let feedLayer in app.feedLayers) {
@@ -148,6 +168,32 @@ function load() {
         }).then(userLayers => {
             app.map.addControl(app.layersControl);
             Object.keys(userLayers).forEach(key => {
+                userLayers[key].eachLayer(m => {
+                        let ll = m.getLatLng();
+                        distributeToZones(ll.lat, ll.lng, key);
+                    }
+                );
+            })
+            return userLayers;
+        }).then(userLayers => {
+            app.zs.removeFrom(app.map);
+            app.zs = (function () {
+                // If specified, bind popups to individual polygon zones
+                if (typeof app.options.zones.popup !== 'undefined') {
+                    return app.systemZones.bindPopup(function (layer) {
+                        let str = app.options.zones.popup.title + layer.feature.properties[app.options.zones.popup.geoJsonField];
+                        str += `<br />`;
+                        str += toPopupDisplay(getZoneCounts(layer.feature.properties[app.options.zones.popup.geoJsonField]));
+                        return str;
+                    });
+                } else {
+                    return app.systemZones;
+                }
+            })();
+            app.zs.addTo(app.map);
+            return userLayers;
+        }).then(userLayers => {
+            Object.keys(userLayers).forEach(key => {
                 app.map.addLayer(userLayers[key]);
                 app.feedLayers[key] = userLayers[key];
                 app.layersControl.addOverlay(userLayers[key], key);
@@ -156,11 +202,42 @@ function load() {
             // if (document.getElementById('loader') != undefined) {
             //     document.getElementById('loader').remove();
             // }
+
             resolve(true);
         });
     }).then(() => {
         activateReloader();
     });
+}
+
+function distributeToZones(lat, lon, feed) {
+
+    let zoned = false;
+    for(let z in app.zones) {
+        let zone = app.zones[z];
+        if (!zoned && booleanPointInPolygon([lon, lat], zone.poly)) {
+            let a = zone.objs[feed];
+            if (typeof a === 'undefined') {
+                app.zones[z].objs[feed] = 1;
+            }
+            else {
+                app.zones[z].objs[feed] = a + 1;
+            }
+            zoned = true;
+        }
+    }
+    if(!zoned) {
+        let a = app.UNZONED;
+        if (typeof a === 'undefined') {
+            app.UNZONED = {};
+        }
+        let b = app.UNZONED[feed];
+        if (typeof b === 'undefined') {
+            app.UNZONED[feed] = 0;
+        }
+        b = app.UNZONED[feed];
+        app.UNZONED[feed] = b + 1;
+    }
 }
 
 function activateReloader() {
