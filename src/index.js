@@ -48,7 +48,7 @@ app.customButtons = L.Control.extend({
     
         <div class='leaflet-bar leaflet-control leaflet-control-custom' onclick='document.getElementById("modal-container").style.display = ""'><span class='symbol'>ⓘ</span> About</div>
 
-        <div class='leaflet-bar leaflet-control leaflet-control-custom fix-margin' onclick='load()'><span class='symbol'>↻</span> Reload Data...</div>
+        <div id="reload" class='leaflet-bar leaflet-control leaflet-control-custom fix-margin'><span class='symbol'>↻</span> Reload Data...</div>
         
         </div>
         `;
@@ -116,15 +116,14 @@ function createFeeds(specified) {
 let loading = false;
 
 // Clear map and load
-export function load() {
-
-    if (!loading) {
-        loading = true;
+function load() {
+    deactivateReloader();
+    return new Promise(function (resolve) {
 
         for (let feedLayer in app.feedLayers) {
             app.feedLayers[feedLayer].eachLayer(function (layerToRemove) {
                 app.feedLayers[feedLayer].removeLayer(layerToRemove);
-            })
+            });
             app.layersControl.removeLayer(app.feedLayers[feedLayer]);
         }
 
@@ -154,13 +153,32 @@ export function load() {
                 app.layersControl.addOverlay(userLayers[key], key);
             });
         }).finally(_f => {
-            if (document.getElementById('loader') != undefined) {
-                document.getElementById('loader').remove();
-            }
+            // if (document.getElementById('loader') != undefined) {
+            //     document.getElementById('loader').remove();
+            // }
+            resolve(true);
         });
-    }
+    }).then(() => {
+        activateReloader();
+    });
 }
 
+function activateReloader() {
+    let elem = document.getElementById("reload");
+    elem.classList.remove('buttonLoading');
+    elem.innerHTML = "<span class='symbol'>↻</span> Reload Data...";
+    elem.onclick = function () {
+        load();
+    };
+}
+
+function deactivateReloader() {
+    let elem = document.getElementById("reload");
+    elem.innerHTML = "<span class='symbol spin'>↻</span> Loading...";
+    elem.onclick = function () {
+    };
+    elem.classList.add('buttonLoading');
+}
 
 // Load on load :)
 load();

@@ -42,7 +42,7 @@ export class Station {
      * @param {Object} json JSON representing the realtime status of the Station, sourced from station_status.json.
      */
     addStatus(json) {
-        for (var s in json) {
+        for (let s in json) {
             switch (s) {
                 case "num_bikes_available":
                     this.num_bikes_available = json[s];

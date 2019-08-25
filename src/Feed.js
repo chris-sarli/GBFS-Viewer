@@ -13,7 +13,6 @@ export class Feed {
         this.hubs = obj.hubs;
         this.files = files;
 
-
         this.vehicles = [];
         this.stations = [];
 
@@ -28,7 +27,9 @@ export class Feed {
         })
     }
 
-    generateFeatureGroup(objects, displayOpts, popup) {
+    generateFeatureGroup(objects, options) {
+        let displayOpts = options.displayOpts;
+        let popup = options.popup;
         let layers = objects.map(obj => {
             let marker = generateMarker(obj, displayOpts);
             if (typeof popup !== 'undefined') {
@@ -37,16 +38,27 @@ export class Feed {
             }
             return marker;
         });
-        return L.featureGroup(layers);
+        let lg = L.featureGroup(layers);
+        if (options.hideDefault) {
+            lg.on('add', function(mapObj) {
+                mapObj.target._map.removeLayer(lg);
+                lg.off('add');
+            })
+        }
+        return [lg, options.hideDefault];
     }
 
     generateFeatureGroups(data) {
         let featureGroups = {};
         if (typeof this.freeVehicles !== 'undefined') {
-            featureGroups[this.freeVehicles.layerName] = this.generateFeatureGroup(data.vehicles, this.freeVehicles.displayOpts, this.freeVehicles.popup);
+            let fg = this.generateFeatureGroup(data.vehicles, this.freeVehicles);
+            featureGroups[this.freeVehicles.layerName] = fg[0];
+            this.freeVehicles.hideDefault = fg[1];
         }
         if (this.hubs !== undefined) {
-            featureGroups[this.hubs.layerName] = this.generateFeatureGroup(data.stations, this.hubs.displayOpts, this.hubs.popup);
+            let fg = this.generateFeatureGroup(data.stations, this.hubs);
+            featureGroups[this.hubs.layerName] = fg[0];
+            this.hubs.hideDefault = fg[1];
         }
         return featureGroups;
     }
@@ -218,7 +230,12 @@ function dissolve(json) {
                     return {"Longitude": precise_round(parseFloat(json[i]), 3)};
                 case "name":
                     return {"Name": json[i]};
-                case "misc":
+                case "num_docks_available":
+                    return {"Available Docks": json[i]};
+                case "num_bikes_available":
+                    return {"Available Bikes": json[i]};
+                case "info":
+                case "status":
                     return dissolve(json[i]);
                 default:
                     let o = {};
@@ -227,7 +244,29 @@ function dissolve(json) {
             }
         }()];
 
-        toWrite = toWrite.concat(toAdd.flat());
+        toWrite = toAdd.flat().concat(toWrite);
     }
-    return toWrite;
+    return toWrite.sort((a, b) => {
+        return getRank(Object.keys(a)[0]) >= getRank(Object.keys(b)[0]);
+    });
+}
+
+function getRank(str) {
+    switch (str) {
+        case "Name":
+            return 1;
+        case "Available Bikes":
+            return 2;
+        case "Available Docks":
+            return 3;
+        case "ID":
+            return 4;
+        case "Latitude":
+            return 5;
+        case "Longitude":
+            return 6;
+        default:
+            return 10;
+    }
+
 }

@@ -8,7 +8,7 @@ export class Vehicle {
      * @param {Object} json The JSON for this vehcile in free_bike_status.json.
      */
     constructor(json) {
-        this.misc = {};
+        this.info = {};
 
         for (let i in json) {
             switch (i) {
@@ -22,7 +22,7 @@ export class Vehicle {
                     this.lon = json[i];
                     break;
                 default:
-                    this.misc[i] = json[i];
+                    this.info[i] = json[i];
                     break;
             }
         }
