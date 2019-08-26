@@ -24,10 +24,63 @@ body {
     font-size: 3rem;
 }
 
-#gbfsMap {
+#appContainer {
     width: 100%;
     height: 100%;
     z-index: 1;
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: flex-start;
+}
+
+#sidebar {
+    width: 20%;
+    height: 100%;
+    background-color: #EEE;
+    box-sizing: border-box;
+    border-right: 2px solid #e56f00;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    font-family: "Helvetica Neue", Arial, Helvetica, sans-serif;
+}
+
+.sectionTitle {
+    color: #e56f00;
+    font-size: 1.8rem;
+    margin-left: 2rem;
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+}
+
+#zones{
+    width: 100%;
+}
+
+.zone_stats {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 15px;
+    padding-left: 2rem;
+    /*border-top: 1px solid #e56f00;*/
+    border-bottom: 1px solid #e56f00;
+    background-color: rgba(229, 111, 0, 0.07);
+}
+
+.zoneName {
+    font-size: 1.2rem;
+    color: #333;
+}
+
+.zone_stats:first-of-type {
+    border-top: 1px solid #e56f00;
+}
+
+#gbfsMap {
+    width: 80%;
+    height: 100%;
 }
 
 .leaflet-control-custom {
@@ -65,7 +118,7 @@ body {
     position: fixed;
     top: 0;
     left: 0;
-    background-color: rgba(0,0,0,0.85);
+    background-color: rgba(0, 0, 0, 0.85);
     z-index: 1000;
     display: flex;
     justify-content: center;
@@ -87,14 +140,13 @@ body {
 }
 
 .buttonLoading {
-    background-image:
-            repeating-linear-gradient(
-                    -45deg,
-                    rgba(229, 111, 0, 0.2),
-                    rgba(229, 111, 0, 0.2) 11px,
-                    rgba(229, 111, 0, 0.3) 10px,
-                    rgba(229, 111, 0, 0.3) 20px /* determines size */
-            );
+    background-image: repeating-linear-gradient(
+            -45deg,
+            rgba(229, 111, 0, 0.2),
+            rgba(229, 111, 0, 0.2) 11px,
+            rgba(229, 111, 0, 0.3) 10px,
+            rgba(229, 111, 0, 0.3) 20px /* determines size */
+    );
     background-size: 28px 28px;
     animation: move .5s linear infinite;
 }

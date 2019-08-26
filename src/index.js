@@ -140,6 +140,8 @@ function load() {
     clearZoneCounts();
     return new Promise(function (resolve) {
 
+        setSidebarZones(app.zones);
+
         for (let feedLayer in app.feedLayers) {
             app.feedLayers[feedLayer].eachLayer(function (layerToRemove) {
                 app.feedLayers[feedLayer].removeLayer(layerToRemove);
@@ -203,12 +205,32 @@ function load() {
             //     document.getElementById('loader').remove();
             // }
 
+            setSidebarZones(app.zones);
+
             resolve(true);
         });
     }).then(() => {
         activateReloader();
     });
 }
+
+function setSidebarZones(zones){
+    console.log(zones);
+    document.getElementById("zones").innerHTML = "";
+    for(let z in zones) {
+
+        let stats = "";
+
+        for (let o in zones[z].objs) {
+            stats += `<div class='stat'><strong>${o}:</strong> ${zones[z].objs[o]}</div>`;
+        }
+
+        document.getElementById("zones").innerHTML += `
+        <div class='zone_stats'><div class="zoneName">${z}</div><div class="stats">${stats}</div></div>
+        `;
+    }
+}
+
 
 function distributeToZones(lat, lon, feed) {
 
