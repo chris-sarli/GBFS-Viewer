@@ -14,6 +14,8 @@ let app = {}
 
 app.options = options;
 
+app.showSidebar = true;
+
 // Holds the OldFeed objects
 app.feeds = [];
 
@@ -41,7 +43,7 @@ app.map = L.map(app.options.mapObject, {
 });
 
 // Custom button control
-app.customButtons = L.Control.extend({
+app.MetaButtons = L.Control.extend({
     options: {
         position: 'bottomright'
     },
@@ -62,9 +64,37 @@ app.customButtons = L.Control.extend({
     },
 });
 
-// Create an instance of the custom control buttons and add it to the map
-let custom = new app.customButtons();
-custom.addTo(app.map);
+// Create an instance of the metaButtons control buttons and add it to the map
+let metaButtons = new app.MetaButtons();
+metaButtons.addTo(app.map);
+
+// Custom button control
+app.ViewButons = L.Control.extend({
+    options: {
+        position: 'topleft'
+    },
+    onAdd: function (map) {
+
+        let container = L.DomUtil.create('div', 'leaflet-bar leaflet-control leaflet-control-custom');
+        container.setAttribute("id", "sidebarControl")
+        container.innerHTML = `←`;
+        return container;
+    },
+});
+
+// Create an instance of the metaButtons control buttons and add it to the map
+let viewButtons = new app.ViewButons();
+
+(function() {
+    return new Promise(resolve => {
+    viewButtons.addTo(app.map);
+        return (document.getElementById("sidebarControl"));
+});
+})().finally(elem => {
+    alert(elem);
+});
+
+
 
 function getZoneCounts(zone) {
     let keys = Object.keys(app.zones[zone].objs);
@@ -222,11 +252,12 @@ function setSidebarZones(zones){
         let stats = "";
 
         for (let o in zones[z].objs) {
-            stats += `<div class='stat'><strong>${o}:</strong> ${zones[z].objs[o]}</div>`;
+            stats += `<li class='stat'>${o}: ${zones[z].objs[o]}</li>`;
         }
 
         document.getElementById("zones").innerHTML += `
-        <div class='zone_stats'><div class="zoneName">${z}</div><div class="stats">${stats}</div></div>
+           <li class="l2">${z}</li>
+           <ul>${stats}</ul>
         `;
     }
 }

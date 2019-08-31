@@ -35,11 +35,11 @@ body {
 }
 
 #sidebar {
-    width: 20%;
+    color: #EFEFEF;
+    width: 30%;
     height: 100%;
-    background-color: #EEE;
+    background-color: #222;
     box-sizing: border-box;
-    border-right: 2px solid #e56f00;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
@@ -47,16 +47,39 @@ body {
     font-family: "Helvetica Neue", Arial, Helvetica, sans-serif;
 }
 
+ul {
+    list-style-type: none;
+    padding-left: 1rem;
+}
+
 .sectionTitle {
-    color: #e56f00;
-    font-size: 1.8rem;
+    font-weight: bold;
+    font-size: 1.4rem;
     margin-left: 2rem;
     margin-top: 2rem;
     margin-bottom: 2rem;
 }
 
-#zones{
-    width: 100%;
+.info {
+    margin-left: 2rem;
+    padding-left: 0.5rem;
+}
+
+li {
+    margin-bottom: 0.3rem;
+}
+
+.l1 {
+    font-size: 1.2rem;
+    font-weight: 500;
+}
+
+.l2 {
+    font-size: 1.05rem;
+}
+
+.stat {
+    font-size: 0.9rem;
 }
 
 .zone_stats {
@@ -79,7 +102,7 @@ body {
 }
 
 #gbfsMap {
-    width: 80%;
+    width: 70%;
     height: 100%;
 }
 
