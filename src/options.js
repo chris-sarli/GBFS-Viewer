@@ -20,12 +20,12 @@ let tileBasemapsToInclude = {
     //         attribution: '<a href="https://www.edc.uri.edu">URI EDC</a>, <a href="http://www.rigis.org">RIGIS</a>'
     //     }
     // },
-    // "Rhode Island Aerial Photographs (2011)": {
-    //     url: 'https://tiles.arcgis.com/tiles/S8zZg9pg23JUEexQ/arcgis/rest/services/atlas_img_2011/MapServer/tile/{z}/{y}/{x}',
-    //     opts: {
-    //         attribution: '<a href="https://www.edc.uri.edu">URI EDC</a>, <a href="http://www.rigis.org">RIGIS</a>'
-    //     }
-    // },
+    "Rhode Island Aerial Photographs (2011)": {
+        url: 'https://tiles.arcgis.com/tiles/S8zZg9pg23JUEexQ/arcgis/rest/services/atlas_img_2011/MapServer/tile/{z}/{y}/{x}',
+        opts: {
+            attribution: '<a href="https://www.edc.uri.edu">URI EDC</a>, <a href="http://www.rigis.org">RIGIS</a>'
+        }
+    },
     "ESRI Gray": {
         url: 'https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}',
         opts: {
@@ -131,7 +131,7 @@ let feedsToInclude = [
 
 export let options = {
     mapObject: 'gbfsMap',
-    bounds: [[41.7633, -71.568], [41.8710, -71.281]],
+    bounds: [[41.7703, -71.4777], [41.8648, -71.3706]],
     files: files,
     basemaps: tileBasemapsToInclude,
     feeds: feedsToInclude,
