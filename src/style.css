@@ -79,6 +79,9 @@ body {
     background-color: white;
     border-radius: 5px;
     font-family: "Helvetica Neue", Arial, Helvetica, sans-serif;
+    box-sizing: border-box;
+    overflow: scroll;
+    max-height: 100%;
 }
 
 #modal #close {
