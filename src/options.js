@@ -1,4 +1,6 @@
+const isos = require('json-loader!./isochrones.geojson');
 const zones = require('json-loader!./zones.geojson');
+
 
 let files = {
     'sysinfo': 'system_information',
@@ -129,12 +131,15 @@ let feedsToInclude = [
         }
     }];
 
+
+
 export let options = {
     mapObject: 'gbfsMap',
     bounds: [[41.7703, -71.4777], [41.8648, -71.3706]],
     files: files,
     basemaps: tileBasemapsToInclude,
     feeds: feedsToInclude,
+    isochrones: isos,
     zones: {
         data: zones,
         popup: {

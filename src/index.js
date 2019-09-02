@@ -10,9 +10,12 @@ import {featureEach} from "@turf/meta";
 import {options} from "./options";
 import {Feed, toPopupDisplay} from "./Feed";
 
-let app = {}
+let app = {};
 
 app.options = options;
+
+app.isochrones = {};
+
 
 // Holds the OldFeed objects
 app.feeds = [];
@@ -39,6 +42,23 @@ app.layersControl = L.control.layers(app.basemaps, app.feedLayers, {collapsed: f
 app.map = L.map(app.options.mapObject, {
     layers: Object.values(app.basemaps)
 });
+
+
+if (typeof app.options.isochrones !== "undefined") {
+    for (let iN in app.options.isochrones) {
+        let i = app.options.isochrones[iN];
+        let props = i.properties;
+        if (typeof app.isochrones[props.lat] === 'undefined') {
+            app.isochrones[props.lat] = {};
+        }
+        app.isochrones[props.lat][props.lon] = L.geoJSON(i, {
+                fillColor: "#8de302",
+                fillOpacity: 0.3,
+                opacity: 0,
+                weight: 0
+        });
+    }
+}
 
 // Custom button control
 app.customButtons = L.Control.extend({
@@ -68,7 +88,6 @@ custom.addTo(app.map);
 
 function getZoneCounts(zone) {
     let keys = Object.keys(app.zones[zone].objs);
-    console.log(zone, keys)
     return keys.map(key => {
         let o = {};
         o[key] = app.zones[zone].objs[key];
@@ -86,7 +105,6 @@ if (typeof app.options.zones !== 'undefined') {
         app.zones[c.properties.zone] = {objs: {}};
         app.zones[c.properties.zone].poly = c.geometry;
     });
-    console.log(app.zones);
 }
 
 /**
@@ -173,7 +191,7 @@ function load() {
                         distributeToZones(ll.lat, ll.lng, key);
                     }
                 );
-            })
+            });
             return userLayers;
         }).then(userLayers => {
             app.zs.removeFrom(app.map);
@@ -199,6 +217,22 @@ function load() {
                 app.layersControl.addOverlay(userLayers[key], key);
             });
         }).finally(_f => {
+
+            app.feeds.forEach((f) => {
+                // console.log(f[0]);
+                for (let c in f[0].freeVehicles.coords) {
+                   let toLight = f[0].freeVehicles.coords[c];
+                    console.log(toLight[0], toLight[1])
+                    // console.log(app.isochrones[toLight[0]][toLight[1]]);
+                   if (typeof app.isochrones[toLight[0]] !== 'undefined' && typeof app.isochrones[toLight[0]][toLight[1]] !== 'undefined') {
+
+                   let toShow = app.isochrones[toLight[0]][toLight[1]];
+                    if(typeof toShow !== 'undefined') {
+                   toShow.addTo(app.map);
+                   }
+                   }
+                }
+            })
             // if (document.getElementById('loader') != undefined) {
             //     document.getElementById('loader').remove();
             // }

@@ -30,12 +30,13 @@ export class Feed {
     generateFeatureGroup(objects, options) {
         let displayOpts = options.displayOpts;
         let popup = options.popup;
+        let coords = [];
         let layers = objects.map(obj => {
             let marker = generateMarker(obj, displayOpts);
             if (typeof popup !== 'undefined') {
-
                 marker.bindPopup(toPopupDisplay(dissolve(obj)));
             }
+            coords.push([precise_round(parseFloat(obj.lat), 3), precise_round(parseFloat(obj.lon), 3)]);
             return marker;
         });
         let lg = L.featureGroup(layers);
@@ -45,7 +46,7 @@ export class Feed {
                 lg.off('add');
             })
         }
-        return [lg, options.hideDefault];
+        return [lg, options.hideDefault, coords];
     }
 
     generateFeatureGroups(data) {
@@ -54,11 +55,14 @@ export class Feed {
             let fg = this.generateFeatureGroup(data.vehicles, this.freeVehicles);
             featureGroups[this.freeVehicles.layerName] = fg[0];
             this.freeVehicles.hideDefault = fg[1];
+            console.log(fg[2]);
+            this.freeVehicles.coords = fg[2];
         }
         if (this.hubs !== undefined) {
             let fg = this.generateFeatureGroup(data.stations, this.hubs);
             featureGroups[this.hubs.layerName] = fg[0];
             this.hubs.hideDefault = fg[1];
+            this.hubs.coords = fg[2];
         }
         return featureGroups;
     }
