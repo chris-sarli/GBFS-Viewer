@@ -149,7 +149,7 @@ export let options = {
         display: {
             color: "#e56f00",
             fillColor: "#e56f00",
-            fillOpacity: 0.05
+            fillOpacity: 0
         }
     }
 
