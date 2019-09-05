@@ -34,15 +34,23 @@ let tileBasemapsToInclude = {
             attribution: 'Tiles &copy; Esri &mdash; Esri, DeLorme, NAVTEQ',
             maxZoom: 16
         }
-    }
-    // "CartoDB Dark": {
-    //     url: 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',
-    //     opts: {
-    //         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
-    //         subdomains: 'abcd',
-    //         maxZoom: 19
-    //     }
-    // },
+    },
+    "ESRI Dark Gray": {
+        url: 'https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base/MapServer/tile/{z}/{y}/{x}',
+        opts: {
+            attribution: 'Tiles &copy; Esri &mdash; Esri, DeLorme, NAVTEQ',
+            maxZoom: 16
+        }
+    },
+    "CartoDB Dark": {
+        url: 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',
+        opts: {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+            subdomains: 'abcd',
+            maxZoom: 19
+        }
+    },
+
     // "CartoDB Voyager": {
     //     url: 'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png',
     //     opts: {
@@ -60,7 +68,7 @@ let feedsToInclude = [
         freeVehicles: {
             layerName: "JUMP",
             popup: true,
-            hideDefault: false,
+            hideDefault: true,
             displayOpts: {
                 type: "circle",
                 options: {
@@ -96,7 +104,7 @@ let feedsToInclude = [
         freeVehicles: {
             layerName: "Bird",
             popup: true,
-            hideDefault: false,
+            hideDefault: true,
             displayOpts: {
                 type: "circle",
                 options: {
@@ -116,7 +124,7 @@ let feedsToInclude = [
         freeVehicles: {
             layerName: "Lime",
             popup: true,
-            hideDefault: false,
+            hideDefault: true,
             displayOpts: {
                 type: "circle",
                 options: {
@@ -149,7 +157,9 @@ export let options = {
         display: {
             color: "#e56f00",
             fillColor: "#e56f00",
-            fillOpacity: 0
+            fillOpacity: 0,
+            opacity: 0.9,
+            weight: 1.5
         }
     }
 

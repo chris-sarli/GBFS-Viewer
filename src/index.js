@@ -52,8 +52,8 @@ if (typeof app.options.isochrones !== "undefined") {
             app.isochrones[props.lat] = {};
         }
         app.isochrones[props.lat][props.lon] = L.geoJSON(i, {
-                fillColor: "#8de302",
-                fillOpacity: 0.15,
+                fillColor: "#428bff",
+                fillOpacity: 0.25,
                 opacity: 0,
                 weight: 0
         });
