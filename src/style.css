@@ -55,6 +55,7 @@ body {
 
 .fix-margin {
     margin-right: 4px !important;
+    transition: 0.2s ease;
 }
 
 #modal-container {
@@ -78,9 +79,48 @@ body {
     background-color: white;
     border-radius: 5px;
     font-family: "Helvetica Neue", Arial, Helvetica, sans-serif;
+    box-sizing: border-box;
+    overflow: scroll;
+    max-height: 100%;
 }
 
 #modal #close {
     float: right;
     cursor: pointer;
+}
+
+.buttonLoading {
+    background-image:
+            repeating-linear-gradient(
+                    -45deg,
+                    rgba(229, 111, 0, 0.2),
+                    rgba(229, 111, 0, 0.2) 11px,
+                    rgba(229, 111, 0, 0.3) 10px,
+                    rgba(229, 111, 0, 0.3) 20px /* determines size */
+            );
+    background-size: 28px 28px;
+    animation: move .5s linear infinite;
+}
+
+.spin {
+    display: inline-block;
+    animation: spinner 0.5s linear infinite;
+}
+
+@keyframes spinner {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes move {
+    0% {
+        background-position: 0 0;
+    }
+    100% {
+        background-position: 28px 0;
+    }
 }
