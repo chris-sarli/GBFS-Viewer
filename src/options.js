@@ -88,26 +88,6 @@ let feedsToInclude = [
             }
         }
     },
-	{
-        url: "https://data.lime.bike/api/partners/v1/gbfs/providence/",
-        feed_name: "Lime",
-        freeVehicles: {
-            layerName: "Lime",
-            popup: true,
-            hideDefault: false,
-            displayOpts: {
-                type: "circle",
-                options: {
-                    radius: 5,
-                    color: "#FFFFFF",
-                    fillColor: "#45D700",
-                    fillOpacity: 0.9,
-                    opacity: 0.9,
-                    weight: 2
-                }
-            }
-        }
-    },
     {
         url: "https://web.spin.pm/api/gbfs/v1/providence/",
         feed_name: "Spin",
