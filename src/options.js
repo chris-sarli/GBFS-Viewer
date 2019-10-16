@@ -52,42 +52,42 @@ let tileBasemapsToInclude = {
 }
 
 let feedsToInclude = [
-    {
-        url: "https://pvd.jumpbikes.com/opendata/",
-        feed_name: "JUMP",
-        freeVehicles: {
-            layerName: "JUMP",
-            popup: true,
-            hideDefault: false,
-            displayOpts: {
-                type: "circle",
-                options: {
-                    radius: 5,
-                    color: "#FFFFFF",
-                    fillColor: "#FF0A2D",
-                    fillOpacity: 0.9,
-                    opacity: 0.9,
-                    weight: 2
-                }
-            }
-        },
-        hubs: {
-            layerName: "JUMP Stations",
-            popup: true,
-            hideDefault: true,
-            displayOpts: {
-                type: "circle",
-                options: {
-                    radius: 7,
-                    color: "#FF0A2D",
-                    fillColor: "white",
-                    fillOpacity: 0,
-                    opacity: 1,
-                    weight: 3
-                }
-            }
-        }
-    },
+    // {
+//         url: "https://pvd.jumpbikes.com/opendata/",
+//         feed_name: "JUMP",
+//         freeVehicles: {
+//             layerName: "JUMP",
+//             popup: true,
+//             hideDefault: false,
+//             displayOpts: {
+//                 type: "circle",
+//                 options: {
+//                     radius: 5,
+//                     color: "#FFFFFF",
+//                     fillColor: "#FF0A2D",
+//                     fillOpacity: 0.9,
+//                     opacity: 0.9,
+//                     weight: 2
+//                 }
+//             }
+//         },
+//         hubs: {
+//             layerName: "JUMP Stations",
+//             popup: true,
+//             hideDefault: true,
+//             displayOpts: {
+//                 type: "circle",
+//                 options: {
+//                     radius: 7,
+//                     color: "#FF0A2D",
+//                     fillColor: "white",
+//                     fillOpacity: 0,
+//                     opacity: 1,
+//                     weight: 3
+//                 }
+//             }
+//         }
+//     },
     {
         url: "https://web.spin.pm/api/gbfs/v1/providence/",
         feed_name: "Spin",
@@ -124,7 +124,7 @@ export let options = {
         display: {
             color: "#e56f00",
             fillColor: "#e56f00",
-            fillOpacity: 0.05
+            fillOpacity: 0.0
         }
     }
 
