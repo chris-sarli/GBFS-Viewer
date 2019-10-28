@@ -62,42 +62,42 @@ let tileBasemapsToInclude = {
 }
 
 let feedsToInclude = [
-    {
-        url: "https://pvd.jumpbikes.com/opendata/",
-        feed_name: "JUMP",
-        freeVehicles: {
-            layerName: "JUMP",
-            popup: true,
-            hideDefault: false,
-            displayOpts: {
-                type: "circle",
-                options: {
-                    radius: 5,
-                    color: "#FFFFFF",
-                    fillColor: "#FF0A2D",
-                    fillOpacity: 0.9,
-                    opacity: 0.9,
-                    weight: 2
-                }
-            }
-        },
-        hubs: {
-            layerName: "JUMP Stations",
-            popup: true,
-            hideDefault: true,
-            displayOpts: {
-                type: "circle",
-                options: {
-                    radius: 7,
-                    color: "#FF0A2D",
-                    fillColor: "white",
-                    fillOpacity: 0,
-                    opacity: 1,
-                    weight: 3
-                }
-            }
-        }
-    },
+    // {
+    //     url: "https://pvd.jumpbikes.com/opendata/",
+    //     feed_name: "JUMP",
+    //     freeVehicles: {
+    //         layerName: "JUMP",
+    //         popup: true,
+    //         hideDefault: false,
+    //         displayOpts: {
+    //             type: "circle",
+    //             options: {
+    //                 radius: 5,
+    //                 color: "#FFFFFF",
+    //                 fillColor: "#FF0A2D",
+    //                 fillOpacity: 0.9,
+    //                 opacity: 0.9,
+    //                 weight: 2
+    //             }
+    //         }
+    //     },
+    //     hubs: {
+    //         layerName: "JUMP Stations",
+    //         popup: true,
+    //         hideDefault: true,
+    //         displayOpts: {
+    //             type: "circle",
+    //             options: {
+    //                 radius: 7,
+    //                 color: "#FF0A2D",
+    //                 fillColor: "white",
+    //                 fillOpacity: 0,
+    //                 opacity: 1,
+    //                 weight: 3
+    //             }
+    //         }
+    //     }
+    // },
     {
         url: "https://web.spin.pm/api/gbfs/v1/providence/",
         feed_name: "Spin",
@@ -108,11 +108,11 @@ let feedsToInclude = [
             displayOpts: {
                 type: "circle",
                 options: {
-                    radius: 5,
+                    radius: 1,
                     color: "#FFFFFF",
                     fillColor: "#ff5436",
-                    fillOpacity: 0.9,
-                    opacity: 0.9,
+                    fillOpacity: 0.7,
+                    opacity: 0,
                     weight: 2
                 }
             }
