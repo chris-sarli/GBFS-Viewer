@@ -130,7 +130,8 @@ let feedsToInclude = [
                 }
             }
         }
-    }];
+    }
+    ];
 
 export let options = {
     mapObject: 'gbfsMap',

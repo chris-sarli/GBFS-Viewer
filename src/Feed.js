@@ -9,7 +9,6 @@ export class Feed {
         this.name = obj.name;
         this.displayOpts = obj.displayOpts;
         this.urlParams = "";
-        console.log(obj);
         if (Object.keys(obj).includes('urlParams')) {
             this.urlParams = "?";
             this.urlParams += Object.keys(obj.urlParams).map(i => i + "=" + obj.urlParams[i]).join("&");
@@ -36,7 +35,7 @@ export class Feed {
     generateFeatureGroup(objects, options) {
         let displayOpts = options.displayOpts;
         let popup = options.popup;
-        let layers = objects.map(obj => {
+        let layers = objects.filter(obj => (obj.lat != null && obj.lon != null)).map(obj => {
             let marker = generateMarker(obj, displayOpts);
             if (typeof popup !== 'undefined') {
 
@@ -159,6 +158,7 @@ function parseFeeds(obj, fields) {
  * @param {Object} displayOpts JSON representing the options which the marker will be displayed with.
  */
 function generateMarker(obj, displayOpts) {
+    console.log(obj);
     let marker;
     switch (displayOpts.type) {
         case "icon":
@@ -187,7 +187,6 @@ export function toPopupDisplay(objects) {
 }
 
 function getUrl(url, urlParams) {
-    console.log("STUFF", url, urlParams);
     if (typeof url === 'undefined') {
         console.log("Rejected null url.");
         return {};
