@@ -187,8 +187,10 @@ function load() {
             app.map.addControl(app.layersControl);
             Object.keys(userLayers).forEach(key => {
                 userLayers[key].eachLayer(m => {
-                        let ll = m.getLatLng();
-                        distributeToZones(ll.lat, ll.lng, key);
+                        if(m.getLatLng() != null) {
+                            let ll = m.getLatLng();
+                            distributeToZones(ll.lat, ll.lng, key);
+                        }
                     }
                 );
             });

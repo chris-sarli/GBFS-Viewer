@@ -9,7 +9,6 @@ export class Feed {
         this.name = obj.name;
         this.displayOpts = obj.displayOpts;
         this.urlParams = "";
-        console.log(obj);
         if (Object.keys(obj).includes('urlParams')) {
             this.urlParams = "?";
             this.urlParams += Object.keys(obj.urlParams).map(i => i + "=" + obj.urlParams[i]).join("&");
@@ -36,13 +35,12 @@ export class Feed {
     generateFeatureGroup(objects, options) {
         let displayOpts = options.displayOpts;
         let popup = options.popup;
-        let coords = [];
-        let layers = objects.map(obj => {
+        let layers = objects.filter(obj => (obj.lat != null && obj.lon != null)).map(obj => {
             let marker = generateMarker(obj, displayOpts);
             if (typeof popup !== 'undefined') {
+
                 marker.bindPopup(toPopupDisplay(dissolve(obj)));
             }
-            coords.push([precise_round(parseFloat(obj.lat), 3), precise_round(parseFloat(obj.lon), 3)]);
             return marker;
         });
         let lg = L.featureGroup(layers);
@@ -52,7 +50,7 @@ export class Feed {
                 lg.off('add');
             })
         }
-        return [lg, options.hideDefault, coords];
+        return [lg, options.hideDefault];
     }
 
     generateFeatureGroups(data) {
@@ -61,14 +59,11 @@ export class Feed {
             let fg = this.generateFeatureGroup(data.vehicles, this.freeVehicles);
             featureGroups[this.freeVehicles.layerName] = fg[0];
             this.freeVehicles.hideDefault = fg[1];
-            console.log(fg[2]);
-            this.freeVehicles.coords = fg[2];
         }
         if (this.hubs !== undefined) {
             let fg = this.generateFeatureGroup(data.stations, this.hubs);
             featureGroups[this.hubs.layerName] = fg[0];
             this.hubs.hideDefault = fg[1];
-            this.hubs.coords = fg[2];
         }
         return featureGroups;
     }
@@ -163,6 +158,7 @@ function parseFeeds(obj, fields) {
  * @param {Object} displayOpts JSON representing the options which the marker will be displayed with.
  */
 function generateMarker(obj, displayOpts) {
+    console.log(obj);
     let marker;
     switch (displayOpts.type) {
         case "icon":
@@ -191,7 +187,6 @@ export function toPopupDisplay(objects) {
 }
 
 function getUrl(url, urlParams) {
-    console.log("STUFF", url, urlParams);
     if (typeof url === 'undefined') {
         console.log("Rejected null url.");
         return {};

@@ -140,7 +140,8 @@ let feedsToInclude = [
                 }
             }
         }
-    }];
+    }
+    ];
 
 
 
