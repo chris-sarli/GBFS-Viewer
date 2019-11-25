@@ -8,6 +8,12 @@ export class Feed {
         this.url = obj.url;
         this.name = obj.name;
         this.displayOpts = obj.displayOpts;
+        this.urlParams = "";
+        console.log(obj);
+        if (Object.keys(obj).includes('urlParams')) {
+            this.urlParams = "?";
+            this.urlParams += Object.keys(obj.urlParams).map(i => i + "=" + obj.urlParams[i]).join("&");
+        }
 
         this.freeVehicles = obj.freeVehicles;
         this.hubs = obj.hubs;
@@ -20,7 +26,7 @@ export class Feed {
     }
 
     getUrls() {
-        return getUrl(this.url + "gbfs.json").then(gbfsFile => {
+        return getUrl(this.url + "gbfs", this.urlParams).then(gbfsFile => {
             return gbfsFile.data["en"].feeds;
         }).then(urlObjs => {
             return parseFeeds(urlObjs, this.files);
@@ -69,19 +75,19 @@ export class Feed {
             let promises = [];
 
             if (typeof gbfsUrls.free_status !== 'undefined') {
-                promises.push(getUrl(gbfsUrls.free_status).then(response => response.data.bikes));
+                promises.push(getUrl(gbfsUrls.free_status, this.urlParams).then(response => response.data.bikes));
             } else {
                 promises.push(Promise.resolve({}));
             }
 
             if (typeof gbfsUrls.station_info !== 'undefined') {
-                promises.push(getUrl(gbfsUrls.station_info).then(response => response.data.stations));
+                promises.push(getUrl(gbfsUrls.station_info, this.urlParams).then(response => response.data.stations));
             } else {
                 promises.push(Promise.resolve({}));
             }
 
             if (typeof gbfsUrls.station_status !== 'undefined') {
-                promises.push(getUrl(gbfsUrls.station_status).then(response => response.data.stations));
+                promises.push(getUrl(gbfsUrls.station_status, this.urlParams).then(response => response.data.stations));
             } else {
                 promises.push(Promise.resolve({}));
             }
@@ -180,7 +186,8 @@ export function toPopupDisplay(objects) {
     return str;
 }
 
-function getUrl(url) {
+function getUrl(url, urlParams) {
+    console.log("STUFF", url, urlParams);
     if (typeof url === 'undefined') {
         console.log("Rejected null url.");
         return {};
@@ -194,7 +201,7 @@ function getUrl(url) {
                     resolve(JSON.parse(this.responseText));
                 }
             };
-            xmlhttp.open("GET", url, true);
+            xmlhttp.open("GET", url + urlParams, true);
             xmlhttp.send();
         });
     }
