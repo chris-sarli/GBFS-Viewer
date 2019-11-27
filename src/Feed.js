@@ -65,12 +65,12 @@ export class Feed {
             featureGroups[this.hubs.layerName] = fg[0];
             this.hubs.hideDefault = fg[1];
         }
+        console.log('fg', featureGroups);
         return featureGroups;
     }
 
     loadData() {
         return this.getUrls().then(gbfsUrls => {
-
             let promises = [];
 
             if (typeof gbfsUrls.free_status !== 'undefined') {
@@ -91,12 +91,10 @@ export class Feed {
                 promises.push(Promise.resolve({}));
             }
 
-
             return promises;
         }).then(promises => {
 
             return Promise.all(promises).then(data => {
-
                 let vehicles = data[0].map(v => {
                     return new Vehicle(v);
                 });
@@ -122,6 +120,9 @@ export class Feed {
     makeLeafletObjects() {
         return this.loadData().then(loaded => {
             return this.generateFeatureGroups(loaded);
+        }).catch(err => {
+            console.warn('Error detected while loading data or generating leaflet objects..', err);
+            return {};
         });
     }
 
@@ -158,7 +159,6 @@ function parseFeeds(obj, fields) {
  * @param {Object} displayOpts JSON representing the options which the marker will be displayed with.
  */
 function generateMarker(obj, displayOpts) {
-    console.log(obj);
     let marker;
     switch (displayOpts.type) {
         case "icon":
