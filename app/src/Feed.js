@@ -8,6 +8,11 @@ export class Feed {
         this.url = obj.url;
         this.name = obj.name;
         this.displayOpts = obj.displayOpts;
+        this.urlParams = "";
+        if (Object.keys(obj).includes('urlParams')) {
+            this.urlParams = "?";
+            this.urlParams += Object.keys(obj.urlParams).map(i => i + "=" + obj.urlParams[i]).join("&");
+        }
 
         this.freeVehicles = obj.freeVehicles;
         this.hubs = obj.hubs;
@@ -20,7 +25,7 @@ export class Feed {
     }
 
     getUrls() {
-        return getUrl(this.url + "gbfs.json").then(gbfsFile => {
+        return getUrl(this.url + "gbfs", this.urlParams).then(gbfsFile => {
             return gbfsFile.data["en"].feeds;
         }).then(urlObjs => {
             return parseFeeds(urlObjs, this.files);
@@ -30,7 +35,7 @@ export class Feed {
     generateFeatureGroup(objects, options) {
         let displayOpts = options.displayOpts;
         let popup = options.popup;
-        let layers = objects.map(obj => {
+        let layers = objects.filter(obj => (obj.lat != null && obj.lon != null)).map(obj => {
             let marker = generateMarker(obj, displayOpts);
             if (typeof popup !== 'undefined') {
 
@@ -60,38 +65,36 @@ export class Feed {
             featureGroups[this.hubs.layerName] = fg[0];
             this.hubs.hideDefault = fg[1];
         }
+        console.log('fg', featureGroups);
         return featureGroups;
     }
 
     loadData() {
         return this.getUrls().then(gbfsUrls => {
-
             let promises = [];
 
             if (typeof gbfsUrls.free_status !== 'undefined') {
-                promises.push(getUrl(gbfsUrls.free_status).then(response => response.data.bikes));
+                promises.push(getUrl(gbfsUrls.free_status, this.urlParams).then(response => response.data.bikes));
             } else {
                 promises.push(Promise.resolve({}));
             }
 
             if (typeof gbfsUrls.station_info !== 'undefined') {
-                promises.push(getUrl(gbfsUrls.station_info).then(response => response.data.stations));
+                promises.push(getUrl(gbfsUrls.station_info, this.urlParams).then(response => response.data.stations));
             } else {
                 promises.push(Promise.resolve({}));
             }
 
             if (typeof gbfsUrls.station_status !== 'undefined') {
-                promises.push(getUrl(gbfsUrls.station_status).then(response => response.data.stations));
+                promises.push(getUrl(gbfsUrls.station_status, this.urlParams).then(response => response.data.stations));
             } else {
                 promises.push(Promise.resolve({}));
             }
-
 
             return promises;
         }).then(promises => {
 
             return Promise.all(promises).then(data => {
-
                 let vehicles = data[0].map(v => {
                     return new Vehicle(v);
                 });
@@ -117,6 +120,9 @@ export class Feed {
     makeLeafletObjects() {
         return this.loadData().then(loaded => {
             return this.generateFeatureGroups(loaded);
+        }).catch(err => {
+            console.warn('Error detected while loading data or generating leaflet objects..', err);
+            return {};
         });
     }
 
@@ -180,7 +186,7 @@ export function toPopupDisplay(objects) {
     return str;
 }
 
-function getUrl(url) {
+function getUrl(url, urlParams) {
     if (typeof url === 'undefined') {
         console.log("Rejected null url.");
         return {};
@@ -194,7 +200,7 @@ function getUrl(url) {
                     resolve(JSON.parse(this.responseText));
                 }
             };
-            xmlhttp.open("GET", url, true);
+            xmlhttp.open("GET", url + urlParams, true);
             xmlhttp.send();
         });
     }

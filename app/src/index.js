@@ -68,7 +68,6 @@ custom.addTo(app.map);
 
 function getZoneCounts(zone) {
     let keys = Object.keys(app.zones[zone].objs);
-    console.log(zone, keys)
     return keys.map(key => {
         let o = {};
         o[key] = app.zones[zone].objs[key];
@@ -86,7 +85,6 @@ if (typeof app.options.zones !== 'undefined') {
         app.zones[c.properties.zone] = {objs: {}};
         app.zones[c.properties.zone].poly = c.geometry;
     });
-    console.log(app.zones);
 }
 
 /**
@@ -169,8 +167,10 @@ function load() {
             app.map.addControl(app.layersControl);
             Object.keys(userLayers).forEach(key => {
                 userLayers[key].eachLayer(m => {
-                        let ll = m.getLatLng();
-                        distributeToZones(ll.lat, ll.lng, key);
+                        if(m.getLatLng() != null) {
+                            let ll = m.getLatLng();
+                            distributeToZones(ll.lat, ll.lng, key);
+                        }
                     }
                 );
             })

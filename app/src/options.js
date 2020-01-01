@@ -52,11 +52,47 @@ let tileBasemapsToInclude = {
 }
 
 let feedsToInclude = [
+    // {
+//         url: "https://pvd.jumpbikes.com/opendata/",
+//         feed_name: "JUMP",
+//         freeVehicles: {
+//             layerName: "JUMP",
+//             popup: true,
+//             hideDefault: false,
+//             displayOpts: {
+//                 type: "circle",
+//                 options: {
+//                     radius: 5,
+//                     color: "#FFFFFF",
+//                     fillColor: "#FF0A2D",
+//                     fillOpacity: 0.9,
+//                     opacity: 0.9,
+//                     weight: 2
+//                 }
+//             }
+//         },
+//         hubs: {
+//             layerName: "JUMP Stations",
+//             popup: true,
+//             hideDefault: true,
+//             displayOpts: {
+//                 type: "circle",
+//                 options: {
+//                     radius: 7,
+//                     color: "#FF0A2D",
+//                     fillColor: "white",
+//                     fillOpacity: 0,
+//                     opacity: 1,
+//                     weight: 3
+//                 }
+//             }
+//         }
+//     },
     {
-        url: "https://pvd.jumpbikes.com/opendata/",
-        feed_name: "JUMP",
+        url: "https://web.spin.pm/api/gbfs/v1/providence/",
+        feed_name: "Spin",
         freeVehicles: {
-            layerName: "JUMP",
+            layerName: "Spin",
             popup: true,
             hideDefault: false,
             displayOpts: {
@@ -64,35 +100,22 @@ let feedsToInclude = [
                 options: {
                     radius: 5,
                     color: "#FFFFFF",
-                    fillColor: "#FF0A2D",
+                    fillColor: "#ff5436",
                     fillOpacity: 0.9,
                     opacity: 0.9,
                     weight: 2
                 }
             }
+        }
+    },
+    {
+        url: "https://share.veoride.com/api/share/",
+        urlParams: {
+            'area_name': "providence"
         },
-        hubs: {
-            layerName: "JUMP Stations",
-            popup: true,
-            hideDefault: true,
-            displayOpts: {
-                type: "circle",
-                options: {
-                    radius: 7,
-                    color: "#FF0A2D",
-                    fillColor: "white",
-                    fillOpacity: 0,
-                    opacity: 1,
-                    weight: 3
-                }
-            }
-        }
-    },
-    {
-        url: "https://mds.bird.co/gbfs/providence/",
-        feed_name: "Bird",
+        feed_name: "VeoRide",
         freeVehicles: {
-            layerName: "Bird",
+            layerName: "VeoRide",
             popup: true,
             hideDefault: false,
             displayOpts: {
@@ -100,34 +123,15 @@ let feedsToInclude = [
                 options: {
                     radius: 5,
                     color: "#FFFFFF",
-                    fillColor: "#121212",
+                    fillColor: "#059a8e",
                     fillOpacity: 0.9,
                     opacity: 0.9,
                     weight: 2
                 }
             }
         }
-    },
-    {
-        url: "https://data.lime.bike/api/partners/v1/gbfs/providence/",
-        feed_name: "Lime",
-        freeVehicles: {
-            layerName: "Lime",
-            popup: true,
-            hideDefault: false,
-            displayOpts: {
-                type: "circle",
-                options: {
-                    radius: 5,
-                    color: "#FFFFFF",
-                    fillColor: "#45D700",
-                    fillOpacity: 0.9,
-                    opacity: 0.9,
-                    weight: 2
-                }
-            }
-        }
-    }];
+    }
+    ];
 
 export let options = {
     mapObject: 'gbfsMap',
@@ -144,7 +148,7 @@ export let options = {
         display: {
             color: "#e56f00",
             fillColor: "#e56f00",
-            fillOpacity: 0.05
+            fillOpacity: 0.0
         }
     }
 

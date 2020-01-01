@@ -21,21 +21,21 @@
   "homepage": "https://github.com/chris-sarli/GBFS-Viewer#readme",
   "devDependencies": {
     "clean-webpack-plugin": "^3.0.0",
-    "css-loader": "^3.2.0",
-    "file-loader": "^4.2.0",
+    "css-loader": "^3.4.0",
+    "file-loader": "^4.3.0",
     "html-loader": "^0.5.5",
     "html-webpack-plugin": "^3.2.0",
     "json-loader": "^0.5.7",
-    "style-loader": "^1.0.0",
-    "webpack": "^4.39.2",
-    "webpack-cli": "^3.3.7",
-    "webpack-dev-server": "^3.8.0"
+    "style-loader": "^1.1.2",
+    "webpack": "^4.41.5",
+    "webpack-cli": "^3.3.10",
+    "webpack-dev-server": "^3.10.1"
   },
   "dependencies": {
     "@turf/boolean-point-in-polygon": "^6.0.1",
     "@turf/helpers": "^6.1.4",
     "@turf/invariant": "^6.1.2",
     "@turf/meta": "^6.0.2",
-    "leaflet": "^1.5.1"
+    "leaflet": "^1.6.0"
   }
 }
