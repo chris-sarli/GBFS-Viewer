@@ -251,7 +251,7 @@ function activateReloader() {
 
 function deactivateReloader() {
     let elem = document.getElementById("reload");
-    elem.innerHTML = "<span class='symbol spin'>↻</span> Loading...";
+    elem.innerHTML = "<span class='symbol spinner'>↻</span> Loading...";
     elem.onclick = function () {
     };
     elem.classList.add('buttonLoading');

@@ -6,3 +6,4 @@ dist
 __pycache__
 cache
 /tools/isochrone_generation/data
+/dist
