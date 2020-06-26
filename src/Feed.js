@@ -229,7 +229,8 @@ export function dissolve(json) {
         let toAdd = [function () {
             switch (i) {
                 case "id":
-                    return {"ID": json[i]};
+                    // GBFS is moving away from using statically assigned IDs
+                    return {};
                 case "lat":
                     return {"Latitude": precise_round(parseFloat(json[i]), 3)};
                 case "lon":
