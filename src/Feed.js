@@ -6,7 +6,7 @@ import {Vehicle} from "./Vehicle";
 export class Feed {
     constructor(obj, files) {
         this.url = obj.url;
-        this.name = obj.name;
+        this.name = obj.feed_name;
         this.displayOpts = obj.displayOpts;
         this.urlParams = "";
         if (Object.keys(obj).includes('urlParams')) {
@@ -38,8 +38,7 @@ export class Feed {
         let layers = objects.filter(obj => (obj.lat != null && obj.lon != null)).map(obj => {
             let marker = generateMarker(obj, displayOpts);
             if (typeof popup !== 'undefined') {
-
-                marker.bindPopup(toPopupDisplay(dissolve(obj)));
+                marker.bindPopup(toPopupDisplay(dissolve(obj, this.name)));
             }
             return marker;
         });
@@ -65,7 +64,6 @@ export class Feed {
             featureGroups[this.hubs.layerName] = fg[0];
             this.hubs.hideDefault = fg[1];
         }
-        console.log('fg', featureGroups);
         return featureGroups;
     }
 
@@ -221,8 +219,11 @@ function precise_round(num, dec) {
     return (Math.round((num * Math.pow(10, dec)) + (num_sign * 0.0001)) / Math.pow(10, dec)).toFixed(dec);
 }
 
-export function dissolve(json) {
+export function dissolve(json, feedName) {
+    return [{"Type": feedName}].concat(dissolveObj(json))
+}
 
+function dissolveObj(json) {
     let toWrite = [];
 
     for (let i in json) {
@@ -243,7 +244,7 @@ export function dissolve(json) {
                     return {"Available Bikes": json[i]};
                 case "info":
                 case "status":
-                    return dissolve(json[i]);
+                    return dissolveObj(json[i]);
                 default:
                     let o = {};
                     o[i] = json[i];
