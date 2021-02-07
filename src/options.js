@@ -107,29 +107,6 @@ let feedsToInclude = [
                 }
             }
         }
-    },
-    {
-        url: "https://share.veoride.com/api/share/",
-        urlParams: {
-            'area_name': "providence"
-        },
-        feed_name: "VeoRide",
-        freeVehicles: {
-            layerName: "VeoRide",
-            popup: true,
-            hideDefault: false,
-            displayOpts: {
-                type: "circle",
-                options: {
-                    radius: 5,
-                    color: "#FFFFFF",
-                    fillColor: "#059a8e",
-                    fillOpacity: 0.9,
-                    opacity: 0.9,
-                    weight: 2
-                }
-            }
-        }
     }
     ];
 
