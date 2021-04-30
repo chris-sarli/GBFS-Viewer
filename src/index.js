@@ -104,7 +104,7 @@ function createFeeds(specified) {
 // This is here because of CORS
 (function() {
 	let cors_api_host = 'cors-service.chris.sarl';
-	let cors_api_url = 'http://' + cors_api_host + '/';
+	let cors_api_url = 'https://' + cors_api_host + '/';
 	let slice = [].slice;
 	let origin = window.location.protocol + '//' + window.location.host;
 	let open = XMLHttpRequest.prototype.open;
